@@ -8,6 +8,8 @@ public class Jetpack : MonoBehaviour
 
     private Rigidbody2D rb;
     public float speed;
+    int countCounter = 0;
+   
     void Start()
     {
         rb = this.GetComponent<Rigidbody2D>();
@@ -27,6 +29,16 @@ public class Jetpack : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        string tag = collision.gameObject.tag;
+        if (tag == "Coin")
+        {
+            countCounter++;
+            Destroy(collision.gameObject);
+
+        }
+    }
 
     void fly()
     {
