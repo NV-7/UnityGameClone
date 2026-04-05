@@ -1,13 +1,17 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Coin_Behavior : MonoBehaviour
 {
     public Vector3 deltaPos;
+    public float speed = 0.1f;
+    private string tag;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        tag = this.transform.tag;
     }
 
     // Update is called once per frame
@@ -19,18 +23,30 @@ public class Coin_Behavior : MonoBehaviour
     private void FixedUpdate()
     {
         Vector3 currentPos = this.transform.position;
-        deltaPos = new Vector3(-0.3f, 0, 0);
+        deltaPos = new Vector3(-speed, 0, 0);
         currentPos = currentPos + deltaPos;
         transform.position = currentPos;
 
-        if(currentPos.x > -20f)
+        if(transform.position.x < -10f)
         {
             Terminate();
         }
+
     }
 
     private void Terminate()
     {
-        Destroy(this);
+        Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+
+        if(tag.Equals("Missile") && collision.tag.Equals("Player"))
+        {
+            
+        }
+        
+        
     }
 }

@@ -5,6 +5,8 @@ public class background : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     public GameObject coin;
+    public float speed = 5f;
+    private float outOfBounds = -20f;
     void Start()
     {
         
@@ -13,28 +15,34 @@ public class background : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GameObject c = null;
-        float initial_Time = Time.deltaTime;
-        if(initial_Time > 2f)
-        {
-             c = spawn_Coin();
-             initial_Time = 0;
-        }
+        
+    }
 
-        if(c != null)
+    private void FixedUpdate()
+    {
+        MoveBackground();
+    }
+
+
+    void MoveBackground()
+    {
+        Transform bkg = null;
+        int childCount = this.transform.childCount;
+        for(int i = 0; i < childCount; i++)
         {
-            Vector3 currentPos = c.transform.position;
-            Vector3 deltaPos = new Vector3(1, 1, 1);
-            currentPos = currentPos + deltaPos;
+            bkg = this.transform.GetChild(i);
+            Vector3 newPos = new Vector3(speed * Time.fixedDeltaTime, 0, 0);
+            bkg.position = bkg.position - newPos;
+
+            Debug.Log(i + " " + bkg.position.x);
+            if (bkg.position.x < outOfBounds)
+            {
+                bkg.position = new Vector3(1704,0,bkg.position.z);
+            }
+            
+
         }
     }
 
-    GameObject spawn_Coin() {
-
-        return Instantiate(coin, new Vector2(15f, 0f), Quaternion.identity);
-
-    }
-
-    
-
+  
 }

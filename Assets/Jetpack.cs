@@ -1,3 +1,5 @@
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,7 +10,11 @@ public class Jetpack : MonoBehaviour
 
     private Rigidbody2D rb;
     public float speed;
-    int countCounter = 0;
+    public GameObject coinText;
+    public GameObject disanceText;
+    int coinCounter = 0;
+    int distance = 0;
+    
    
     void Start()
     {
@@ -27,6 +33,9 @@ public class Jetpack : MonoBehaviour
         {
             fly();
         }
+
+        distance++;
+        UpdateDistance();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -34,7 +43,8 @@ public class Jetpack : MonoBehaviour
         string tag = collision.gameObject.tag;
         if (tag == "Coin")
         {
-            countCounter++;
+            coinCounter++;
+            UpdateCoin();
             Destroy(collision.gameObject);
 
         }
@@ -44,5 +54,14 @@ public class Jetpack : MonoBehaviour
     {
         Vector2 upForce = new Vector2(0, 10);
         rb.AddForce(upForce* speed);
+    }
+
+    void UpdateDistance()
+    {
+        disanceText.GetComponent<TextMeshProUGUI>().text = distance + "m";
+    }
+    void UpdateCoin()
+    {
+        coinText.GetComponent<TextMeshProUGUI>().text = "Coins: " + coinCounter;
     }
 }
