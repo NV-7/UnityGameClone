@@ -37,7 +37,7 @@ public class background : MonoBehaviour
             Debug.Log(i + " " + bkg.position.x);
             if (bkg.position.x < outOfBounds)
             {
-                bkg.position = new Vector3(1704,0,bkg.position.z);
+                bkg.position = new Vector3(17,0,bkg.position.z);
             }
             
 
