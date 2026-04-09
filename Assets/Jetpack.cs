@@ -1,7 +1,9 @@
+using System;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class Jetpack : MonoBehaviour
 {
@@ -12,9 +14,10 @@ public class Jetpack : MonoBehaviour
     public float speed;
     public GameObject coinText;
     public GameObject disanceText;
+    public GameObject gameOverCanvas;
     int coinCounter = 0;
     int distance = 0;
-    
+    private Boolean gameOver = false;
    
     void Start()
     {
@@ -25,6 +28,13 @@ public class Jetpack : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (gameOver)
+        {
+            if (Keyboard.current.spaceKey.wasPressedThisFrame)
+            {
+                restart();
+            }
+        }
        
     }
     private void FixedUpdate()
@@ -48,6 +58,14 @@ public class Jetpack : MonoBehaviour
             Destroy(collision.gameObject);
 
         }
+        if (tag.Equals("Missile"))
+        {
+
+            gameOverCanvas.SetActive(true);
+            gameOver = true;
+            Time.timeScale = 0;
+            Debug.Log("Game Over");
+        }
     }
 
     void fly()
@@ -63,5 +81,11 @@ public class Jetpack : MonoBehaviour
     void UpdateCoin()
     {
         coinText.GetComponent<TextMeshProUGUI>().text = "Coins: " + coinCounter;
+    }
+
+    void restart()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
