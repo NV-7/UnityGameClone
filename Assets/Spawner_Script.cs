@@ -29,9 +29,19 @@ public class Spawner_Script : MonoBehaviour
     
     GameObject spawnObject()
     {
+        int index;
+        float randomNum = Random.Range(0f, 100f);
+        if (randomNum < 10f)
+        {
+            index = objects.Length - 1;
+        }
+        else
+        {
+            index = Random.Range(0, objects.Length - 1);
+        }
 
         Vector2 spawnLocation = new Vector2(this.transform.position.x, Random.Range(-5f, 5f));
-        return Instantiate(objects[Random.Range(0, objects.Length)], spawnLocation, Quaternion.identity);
+        return Instantiate(objects[index], spawnLocation, Quaternion.identity);
 
     }
 
