@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class Jetpack : MonoBehaviour
 {
@@ -17,12 +18,15 @@ public class Jetpack : MonoBehaviour
     public GameObject gameOverCanvas;
     int coinCounter = 0;
     int distance = 0;
+    public int highScore;
     private Boolean gameOver = false;
+    public Boolean speeding = false;
    
     void Start()
     {
         rb = this.GetComponent<Rigidbody2D>();
         speed = 5f;
+        highScore = PlayerPrefs.GetInt("Highscore", 0);
     }
 
     // Update is called once per frame
@@ -43,9 +47,17 @@ public class Jetpack : MonoBehaviour
         {
             fly();
         }
+        if(speeding == false)
+        {
+            distance++;
+            UpdateDistance();
+        }else if(speeding == true)
+        {
+            distance += 2;
+            UpdateDistance();
+        }
 
-        distance++;
-        UpdateDistance();
+            
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -60,10 +72,26 @@ public class Jetpack : MonoBehaviour
         }
         if (tag.Equals("Missile"))
         {
+            if (coinCounter > highScore)
+            {
+                highScore = coinCounter;
+                PlayerPrefs.SetInt("Highscore", highScore);
+                PlayerPrefs.Save();
+            }
 
-            gameOverCanvas.SetActive(true);
+            
             gameOver = true;
+            gameOverCanvas.SetActive(true);
             Time.timeScale = 0;
+
+            
+            TextMeshProUGUI gameOverText = gameOverCanvas.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+            if (gameOverText != null)
+            {
+                gameOverText.text += "\nScore: " + coinCounter;
+                gameOverText.text += "\nHighscore: " + highScore;
+            }
+
             Debug.Log("Game Over");
         }
     }
@@ -78,8 +106,11 @@ public class Jetpack : MonoBehaviour
     {
         disanceText.GetComponent<TextMeshProUGUI>().text = distance + "m";
     }
+
+    
     void UpdateCoin()
     {
+        
         coinText.GetComponent<TextMeshProUGUI>().text = "Coins: " + coinCounter;
     }
 
